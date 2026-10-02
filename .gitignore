@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+
+# Downloaded CICIoT2023 data and generated files
+data/raw/CSV/
+data/processed/*.csv
+data/processed/*.db
+
+# Local editor settings
+.vscode/

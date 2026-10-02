@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Analysis Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <h1>Analysis Results</h1>
+
+        <section class="alert-card {% if attack_rows > 0 %}alert-detected{% else %}alert-clear{% endif %}">
+            {% if attack_rows > 0 %}
+                <h2>Suspicious traffic detected</h2>
+                <p>
+                    The model classified {{ attack_rows }} rows
+                    ({{ "%.4f"|format(attack_percentage) }}% of valid rows)
+                    as an attack.
+                </p>
+            {% else %}
+                <h2>No attack predictions</h2>
+                <p>The model classified all valid rows as benign.</p>
+            {% endif %}
+        </section>
+
+        <section class="summary">
+            <p><strong>Rows in file:</strong> {{ total_rows }}</p>
+            <p><strong>Rows analyzed:</strong> {{ analyzed_rows }}</p>
+            <p><strong>Rows skipped due to missing or invalid values:</strong> {{ invalid_rows }}</p>
+        </section>
+
+        <h2>Predictions by class</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Predicted class</th>
+                    <th>Number of rows</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in prediction_counts %}
+                <tr>
+                    <td>{{ item.class_name }}</td>
+                    <td>{{ item.count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>First 20 predictions</h2>
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        {% for name in preview[0].keys() %}
+                        <th>{{ name }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in preview %}
+                    <tr>
+                        {% for value in row.values() %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <a class="back-link" href="{{ url_for('index') }}">Analyze another file</a>
+        <a class="back-link" href="{{ url_for('history') }}">View upload history</a>
+    </main>
+</body>
+</html>

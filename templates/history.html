@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Upload History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <h1>Upload History</h1>
+        <p class="intro">The latest 100 successful CSV analyses are listed here.</p>
+
+        {% if records %}
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date and time</th>
+                        <th>File</th>
+                        <th>Rows analyzed</th>
+                        <th>Invalid rows</th>
+                        <th>Predicted attack rows</th>
+                        <th>Attack percentage</th>
+                        <th>Predictions by class</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                    <tr>
+                        <td>{{ record["analyzed_at"] }}</td>
+                        <td>{{ record["filename"] }}</td>
+                        <td>{{ record["analyzed_rows"] }}</td>
+                        <td>{{ record["invalid_rows"] }}</td>
+                        <td>{{ record["attack_rows"] }}</td>
+                        <td>{{ "%.4f"|format(record["attack_percentage"]) }}%</td>
+                        <td>{{ record["class_summary"] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No uploads have been analyzed yet.</p>
+        {% endif %}
+
+        <a class="back-link" href="{{ url_for('index') }}">Back to upload page</a>
+    </main>
+</body>
+</html>

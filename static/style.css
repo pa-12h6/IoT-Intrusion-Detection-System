@@ -1,0 +1,142 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f3f6fb;
+    color: #1f2937;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: min(1000px, calc(100% - 32px));
+    margin: 48px auto;
+    padding: 32px;
+    background: #ffffff;
+    border: 1px solid #e1e7ef;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(31, 41, 55, 0.06);
+}
+
+h1 {
+    margin-top: 0;
+    color: #153e75;
+}
+
+h2 {
+    margin-top: 32px;
+    color: #24476b;
+}
+
+.intro,
+.note {
+    color: #526173;
+    line-height: 1.6;
+}
+
+.upload-form {
+    display: grid;
+    gap: 14px;
+    margin-top: 28px;
+}
+
+input[type="file"] {
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+}
+
+button {
+    width: fit-content;
+    padding: 12px 20px;
+    border: 0;
+    border-radius: 8px;
+    background: #1769aa;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0f5086;
+}
+
+.error {
+    margin-top: 20px;
+    padding: 12px;
+    border: 1px solid #f2b8b5;
+    border-radius: 8px;
+    background: #fff1f0;
+    color: #9b1c16;
+}
+
+.note {
+    margin-top: 24px;
+    font-size: 0.9rem;
+}
+
+.summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    padding: 16px;
+    border-radius: 8px;
+    background: #eef5fb;
+}
+
+table {
+    width: 100%;
+    margin-top: 12px;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+th,
+td {
+    padding: 10px 12px;
+    border: 1px solid #dbe3ec;
+    text-align: left;
+    white-space: nowrap;
+}
+
+th {
+    background: #eaf1f8;
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 24px;
+    color: #1769aa;
+}
+
+.alert-card {
+    margin-top: 24px;
+    padding: 18px 20px;
+    border-radius: 8px;
+}
+
+.alert-card h2 {
+    margin: 0 0 8px;
+}
+
+.alert-card p {
+    margin: 0;
+}
+
+.alert-detected {
+    border: 1px solid #f2b8b5;
+    background: #fff1f0;
+    color: #8a1c16;
+}
+
+.alert-clear {
+    border: 1px solid #a8d5b5;
+    background: #effaf2;
+    color: #176b35;
+}
