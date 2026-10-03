@@ -119,7 +119,7 @@ This saves the trained model to:
 models/ids_random_forest_multiclass.joblib
 ```
 
-> Model files are generated locally and are not stored in this repository. After preparing the dataset, run `python .\src\train_model.py` before starting the dashboard.
+Model files are generated locally and are not stored in this repository. After preparing the dataset, run `python .\src\train_model.py` before starting the dashboard.
 
 ## Compare classifiers
 
