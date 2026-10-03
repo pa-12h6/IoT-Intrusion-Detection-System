@@ -17,6 +17,21 @@ The model was evaluated on sampled rows from separate CICIoT2023 files that were
 
 The largest confusion was between DDoS-UDP_Flood and DoS-UDP_Flood. The results apply to these classes and files from CICIoT2023; performance on other networks or datasets may differ.
 
+### Classifier comparison
+
+All classifiers used the same file-separated training and test sets.
+
+| Model | Accuracy | Macro F1 | Weighted F1 |
+|---|---:|---:|---:|
+| Random Forest | 0.9720 | 0.9719 | 0.9719 |
+| Extra Trees | 0.9432 | 0.9425 | 0.9425 |
+| Decision Tree | 0.9412 | 0.9405 | 0.9405 |
+| Majority baseline | 0.2500 | 0.1000 | 0.1000 |
+
+Random Forest performed best on this split. Its DDoS-UDP_Flood recall was 0.89, with most errors classified as DoS-UDP_Flood. Training times are specific to the computer used and are included in `reports/model_comparison.csv`.
+
+![Accuracy and macro-F1 comparison across classifiers](reports/model_comparison.png)
+
 ### Confusion matrix
 
 ![Confusion matrix for the four traffic classes](reports/confusion_matrix.png)
