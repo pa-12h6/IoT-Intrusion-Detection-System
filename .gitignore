@@ -13,3 +13,4 @@ data/processed/*.db
 
 # Local editor settings
 .vscode/
+models/*.joblib

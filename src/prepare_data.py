@@ -13,7 +13,11 @@ CLASS_FILES = {
     "DDoS-UDP_Flood": ("DDoS-UDP_Flood", "DDoS-UDP_Flood"),
     "DoS-UDP_Flood": ("DoS-UDP_Flood", "DoS-UDP_Flood"),
     "Mirai-udpplain": ("Mirai-udpplain", "Mirai-udpplain"),
-    
+    "DDoS-ICMP_Flood": ("DDoS-ICMP_Flood", "DDoS-ICMP_Flood"),
+    "DDoS-TCP_Flood": ("DDoS-TCP_Flood", "DDoS-TCP_Flood"),
+    "DDoS-SYN_Flood": ("DDoS-SYN_Flood", "DDoS-SYN_Flood"),
+    "Mirai-greeth_flood": ("Mirai-greeth_flood", "Mirai-greeth_flood"),
+    "DoS-SYN_Flood": ("DoS-SYN_Flood", "DoS-SYN_Flood"),
 }
 
 SAMPLES_PER_FILE = 3_000

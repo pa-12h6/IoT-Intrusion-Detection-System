@@ -1,47 +1,20 @@
 # IoT Intrusion Detection System
 
-A data science project that classifies IoT network traffic features using a Random Forest model. It includes a data preparation pipeline, model evaluation charts, and a Flask dashboard for CSV uploads and prediction history.
+A data science project that classifies IoT network traffic features using machine learning. It includes a data preparation pipeline, model comparison, evaluation charts, and a Flask dashboard for CSV uploads and prediction history.
 
 ## Supported classes
 
-The current model predicts four classes:
+The current Random Forest model predicts nine classes:
 
 - Benign
+- DDoS-ICMP_Flood
+- DDoS-SYN_Flood
+- DDoS-TCP_Flood
 - DDoS-UDP_Flood
+- DoS-SYN_Flood
 - DoS-UDP_Flood
+- Mirai-greeth_flood
 - Mirai-udpplain
-
-## Evaluation
-
-The model was evaluated on sampled rows from separate CICIoT2023 files that were not used for training. It achieved about **97.2% accuracy** across 11,998 test rows.
-
-The largest confusion was between DDoS-UDP_Flood and DoS-UDP_Flood. The results apply to these classes and files from CICIoT2023; performance on other networks or datasets may differ.
-
-### Classifier comparison
-
-All classifiers used the same file-separated training and test sets.
-
-| Model | Accuracy | Macro F1 | Weighted F1 |
-|---|---:|---:|---:|
-| Random Forest | 0.9720 | 0.9719 | 0.9719 |
-| Extra Trees | 0.9432 | 0.9425 | 0.9425 |
-| Decision Tree | 0.9412 | 0.9405 | 0.9405 |
-| Majority baseline | 0.2500 | 0.1000 | 0.1000 |
-
-Random Forest performed best on this split. Its DDoS-UDP_Flood recall was 0.89, with most errors classified as DoS-UDP_Flood. Training times are specific to the computer used and are included in `reports/model_comparison.csv`.
-
-![Accuracy and macro-F1 comparison across classifiers](reports/model_comparison.png)
-
-### Confusion matrix
-
-![Confusion matrix for the four traffic classes](reports/confusion_matrix.png)
-
-
-### Most important model features
-
-![Top 15 Random Forest feature importances](reports/feature_importance.png)
-
-Feature importance shows which inputs the trained Random Forest used most when making predictions. It does not establish that a feature causes an attack.
 
 ## Dataset
 
@@ -53,7 +26,32 @@ Place the extracted CSV category folders under:
 data/raw/CSV/
 ```
 
-The current preparation script uses the Benign, DDoS-UDP_Flood, DoS-UDP_Flood, and Mirai-udpplain folders. It samples separate files for training and testing. Keep the original dataset files unchanged.
+The preparation script samples files 0, 1, and 2 for training, and file 3 for testing for each class. It removes rows with missing or infinite feature values. Keep the original dataset files unchanged.
+
+## Model comparison and evaluation
+
+The classifiers were trained and evaluated on the same file-separated split: 81,000 training rows and 26,998 test rows. Random Forest performed best by macro-F1 on this split.
+
+| Model | Accuracy | Macro F1 | Weighted F1 |
+|---|---:|---:|---:|
+| Random Forest | 0.8558 | 0.8554 | 0.8553 |
+| Extra Trees | 0.8399 | 0.8392 | 0.8392 |
+| Decision Tree | 0.8371 | 0.8364 | 0.8364 |
+| Majority baseline | 0.1111 | 0.0222 | 0.0222 |
+
+![Accuracy and macro-F1 comparison across classifiers](reports/model_comparison.png)
+
+The main challenge was distinguishing **DDoS-SYN_Flood** from **DoS-SYN_Flood**. The DDoS-SYN_Flood recall was 0.38, and the DoS-SYN_Flood recall was 0.44. DDoS-UDP_Flood and DoS-UDP_Flood were also sometimes confused.
+
+### Confusion matrix
+
+![Confusion matrix for the nine traffic classes](reports/confusion_matrix.png)
+
+### Most important model features
+
+![Top 15 Random Forest feature importances](reports/feature_importance.png)
+
+Feature importance shows which inputs the trained Random Forest used most when making predictions. It does not show that a feature causes an attack.
 
 ## Project structure
 
@@ -62,15 +60,19 @@ IoT-Intrusion-Detection-System/
 ├── app.py
 ├── data/
 │   ├── raw/                 # Original CICIoT2023 CSV files
-│   └── processed/           # Prepared samples and SQLite upload history
+│   └── processed/           # Prepared data and SQLite history
 ├── models/                  # Saved machine-learning models
 ├── reports/
 │   ├── confusion_matrix.png
-│   └── feature_importance.png
+│   ├── feature_importance.png
+│   ├── model_comparison.csv
+│   └── model_comparison.png
 ├── src/
-│   ├── prepare_data.py      # Creates labelled training and test samples
-│   ├── train_model.py       # Trains and evaluates the classifier
-│   └── plot_results.py      # Creates evaluation charts
+│   ├── compare_models.py
+│   ├── plot_model_comparison.py
+│   ├── plot_results.py
+│   ├── prepare_data.py
+│   └── train_model.py
 ├── static/
 │   └── style.css
 └── templates/
@@ -105,7 +107,7 @@ This creates:
 data/processed/ids_multiclass.csv
 ```
 
-## Train and evaluate the model
+## Train the model
 
 ```powershell
 python .\src\train_model.py
@@ -117,18 +119,28 @@ This saves the trained model to:
 models/ids_random_forest_multiclass.joblib
 ```
 
-## Create the charts
+> Model files are generated locally and are not stored in this repository. After preparing the dataset, run `python .\src\train_model.py` before starting the dashboard.
+
+## Compare classifiers
+
+```powershell
+python .\src\compare_models.py
+```
+
+This writes the classifier metrics to:
+
+```text
+reports/model_comparison.csv
+```
+
+## Generate charts
 
 ```powershell
 python .\src\plot_results.py
+python .\src\plot_model_comparison.py
 ```
 
-This creates:
-
-```text
-reports/confusion_matrix.png
-reports/feature_importance.png
-```
+These scripts create the confusion matrix, feature importance, and model comparison charts in `reports/`.
 
 ## Run the dashboard
 
@@ -152,7 +164,8 @@ Stop the local server with **Ctrl+C** in the terminal.
 
 ## Limitations
 
-- The dashboard classifies uploaded CSV files; it does not capture live network traffic.
-- The model predicts only the four classes listed above. Other traffic may be assigned to one of them.
-- Evaluation uses held-out files from CICIoT2023. Results on other networks or datasets may differ.
+- This is a CSV-based prototype; it does not capture live network traffic.
+- Evaluation uses held-out files from CICIoT2023. The test files are separate from the training files, but come from the same dataset.
+- Results on other networks or datasets may differ.
+- The model predicts only the nine classes listed above. Other traffic may be assigned to one of them.
 - The dashboard alert reflects model predictions, not a verified security incident.
